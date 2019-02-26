@@ -1,0 +1,9 @@
+C:\Temp Z - MS Get File Attributes\GetFileAttributes\GetFileAttributes\bin\Debug\GetFileAttributes.exe.config
+C:\Temp Z - MS Get File Attributes\GetFileAttributes\GetFileAttributes\bin\Debug\GetFileAttributes.exe
+C:\Temp Z - MS Get File Attributes\GetFileAttributes\GetFileAttributes\bin\Debug\GetFileAttributes.pdb
+C:\Temp Z - MS Get File Attributes\GetFileAttributes\GetFileAttributes\bin\Debug\policy.2.0.taglib-sharp.dll
+C:\Temp Z - MS Get File Attributes\GetFileAttributes\GetFileAttributes\bin\Debug\taglib-sharp.dll
+C:\Temp Z - MS Get File Attributes\GetFileAttributes\GetFileAttributes\bin\Debug\policy.2.0.taglib-sharp.config
+C:\Temp Z - MS Get File Attributes\GetFileAttributes\GetFileAttributes\obj\Debug\GetFileAttributes.csprojResolveAssemblyReference.cache
+C:\Temp Z - MS Get File Attributes\GetFileAttributes\GetFileAttributes\obj\Debug\GetFileAttributes.exe
+C:\Temp Z - MS Get File Attributes\GetFileAttributes\GetFileAttributes\obj\Debug\GetFileAttributes.pdb
