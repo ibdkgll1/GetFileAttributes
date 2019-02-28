@@ -11,11 +11,11 @@ namespace GetFileAttributes.Business_Logic
     {
         DataAccess DA = new DataAccess();
 
-        public Boolean checkForExistingArtistBL(string connection, string artistName)
+        public Boolean checkForExistingArtistBL(string connection, string artistKey)
         {
             try
             {
-                Boolean existingArtist = DA.checkForExistingArtistDA(connection, artistName);
+                Boolean existingArtist = DA.checkForExistingArtistDA(connection, artistKey);
                 return existingArtist;
             }
             catch (Exception ex)
@@ -50,11 +50,11 @@ namespace GetFileAttributes.Business_Logic
             }
         }
 
-        public Boolean checkForExistingArtistFileBL(string connection, string artistFile)
+        public Boolean checkForExistingArtistFileBL(string connection, string artistPath, string artistFile)
         {
             try
             {
-                Boolean existingArtistFile = DA.checkForExistingArtistFileDA(connection, artistFile);
+                Boolean existingArtistFile = DA.checkForExistingArtistFileDA(connection, artistPath, artistFile);
                 return existingArtistFile;
             }
             catch (Exception ex)

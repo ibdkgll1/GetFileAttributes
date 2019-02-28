@@ -10,7 +10,7 @@ namespace GetFileAttributes.Data_Access
     class DataAccess
     {
 
-        public Boolean checkForExistingArtistDA(string connection, string artistName)
+        public Boolean checkForExistingArtistDA(string connection, string artistKey)
         {
             try
             {
@@ -19,10 +19,10 @@ namespace GetFileAttributes.Data_Access
                 SqlConnection myConnection = new SqlConnection(connection);
                 myConnection.Open();
 
-                string query = "SELECT TOP 1 ArtistName FROM Artist WHERE ArtistName = @ArtistName";
+                string query = "SELECT TOP 1 ArtistKey FROM Artist WHERE ArtistKey = @ArtistKey";
                 SqlCommand myCommand = new SqlCommand(query, myConnection);
 
-                myCommand.Parameters.AddWithValue("@ArtistName", artistName);
+                myCommand.Parameters.AddWithValue("@ArtistKey", artistKey);
 
                 SqlDataReader dr = myCommand.ExecuteReader();
                 while (dr.Read())
@@ -101,7 +101,7 @@ namespace GetFileAttributes.Data_Access
             }
         }
 
-        public Boolean checkForExistingArtistFileDA(string connection, string artistFile)
+        public Boolean checkForExistingArtistFileDA(string connection, string artistPath, string artistFile)
         {
             try
             {
@@ -110,9 +110,10 @@ namespace GetFileAttributes.Data_Access
                 SqlConnection myConnection = new SqlConnection(connection);
                 myConnection.Open();
 
-                string query = "SELECT TOP 1 ArtistFile FROM ArtistFile WHERE ArtistFile = @ArtistFile";
+                string query = "SELECT TOP 1 ArtistFile FROM ArtistFile WHERE ArtistPath = @ArtistPath AND ArtistFile = @ArtistFile";
                 SqlCommand myCommand = new SqlCommand(query, myConnection);
 
+                myCommand.Parameters.AddWithValue("@ArtistPath", artistPath);
                 myCommand.Parameters.AddWithValue("@ArtistFile", artistFile);
 
                 SqlDataReader dr = myCommand.ExecuteReader();
