@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business Logic\BusinessLogic.cs" />
+    <Compile Include="Business Logic\MusicLogic.cs" />
     <Compile Include="Data Access\DataAccess.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -51,79 +51,94 @@ namespace GetFileAttributes
             try
             {
                 BusinessLogic BL = new BusinessLogic();
+                MusicLogic ML = new MusicLogic();
+
+                Guid id = Guid.NewGuid();
+                string artistKey = id.ToString();
+
+                id = Guid.NewGuid();
+                string artistItemKey = id.ToString();
+                
                 string connectionString = Properties.Settings.Default.CONNECTION_STRING;
 
                 TagLib.File tlf = TagLib.File.Create(source + file);
 
                 if (tlf.Tag.Performers.Length > 0)
                 {
-                    BL.AlbumArtist = tlf.Tag.Performers[0].ToString();
+                    ML.AlbumArtist = tlf.Tag.Performers[0].ToString();
                 }
                 else
                 {
-                    BL.AlbumArtist = " ";
+                    ML.AlbumArtist = " ";
                 }
 
                 if (tlf.Tag.Genres.Length > 0)
                 {
-                    BL.Genre = tlf.Tag.Genres.First(s => !string.IsNullOrEmpty(s));
+                    ML.Genre = tlf.Tag.Genres.First(s => !string.IsNullOrEmpty(s));
                 }
                 else
                 {
-                    BL.Genre = " ";
+                    ML.Genre = " ";
                 }
 
                 if (tlf.Tag.Album != null)
                 {
-                    BL.AlbumTitle = tlf.Tag.Album;
+                    ML.AlbumTitle = tlf.Tag.Album;
                 }
                 else
                 {
                     string[] pathSplit = source.Split('\\');
-                    BL.AlbumTitle = pathSplit[4];
+                    ML.AlbumTitle = pathSplit[4];
                 }
 
-                BL.Year = Convert.ToInt32(tlf.Tag.Year);
-                BL.Type = tlf.MimeType.Substring(tlf.MimeType.Length - 3);
-                BL.TrackNumber = Convert.ToInt32(tlf.Tag.Track);
+                ML.Year = Convert.ToInt32(tlf.Tag.Year);
+                ML.Type = tlf.MimeType.Substring(tlf.MimeType.Length - 3);
+                ML.TrackNumber = Convert.ToInt32(tlf.Tag.Track);
 
                 if (tlf.Tag.Title != null)
                 {
-                    BL.TrackTitle = tlf.Tag.Title;
+                    ML.TrackTitle = tlf.Tag.Title;
                 }
                 else
                 {
-                    BL.TrackTitle = file.Substring(0, file.Length - 4);
+                    ML.TrackTitle = file.Substring(0, file.Length - 4);
                 }
-                
-                BL.Duration = tlf.Properties.Duration;
-                BL.Bitrate = tlf.Properties.AudioBitrate;
-                BL.FileSize = new System.IO.FileInfo(source + file).Length;
-                BL.FilePath = source;
-                BL.FileCreated = System.IO.File.GetCreationTime(source + file);
-                BL.FileModified = System.IO.File.GetLastWriteTime(source + file);
 
-                int currentKeyFromArtist = BL.getCurrentKeyFromArtistBL(connectionString);
+                ML.Duration = tlf.Properties.Duration;
+                ML.Bitrate = tlf.Properties.AudioBitrate;
+                ML.FileSize = new System.IO.FileInfo(source + file).Length;
+                ML.FilePath = source;
+                ML.FileCreated = System.IO.File.GetCreationTime(source + file);
+                ML.FileModified = System.IO.File.GetLastWriteTime(source + file);
 
-                artistRowsInserted = 0;
-                Boolean existingArtist = BL.checkForExistingArtistBL(connectionString, BL.AlbumArtist);
-                if (existingArtist == false)
+                string currentKeyFromArtist = BL.getCurrentKeyFromArtistBL(connectionString, ML.AlbumArtist);
+                if (currentKeyFromArtist.Length > 0)
                 {
-                    artistRowsInserted = BL.insertArtistBL(connectionString, 1, BL.AlbumArtist);
+                    artistKey = currentKeyFromArtist;                                               // Over Write The Set Artist Key...
+                }
+
+                if (ML.AlbumArtist.Trim().Length > 0)
+                {
+                    artistRowsInserted = 0;
+                    Boolean existingArtist = BL.checkForExistingArtistBL(connectionString, ML.AlbumArtist);
+                    if (existingArtist == false)
+                    {
+                        artistRowsInserted = BL.insertArtistBL(connectionString, artistKey, ML.AlbumArtist);
+                    }
                 }
 
                 artistFileRowsInserted = 0;
                 Boolean existingArtistFile = BL.checkForExistingArtistFileBL(connectionString, file);
                 if (existingArtistFile == false)
                 {
-                    artistFileRowsInserted = BL.insertArtistFileBL(connectionString, currentKeyFromArtist, BL.FilePath, file, BL.FileCreated, BL.FileModified, BL.FileSize, BL.Type, BL.Bitrate);
+                    artistFileRowsInserted = BL.insertArtistFileBL(connectionString, artistKey, artistItemKey, ML.FilePath, file, ML.FileCreated, ML.FileModified, ML.FileSize, ML.Type, ML.Bitrate);
                 }
 
                 artistSongRowsInserted = 0;
-                Boolean existingArtistSong = BL.checkForExistingArtistSongBL(connectionString, BL.TrackTitle, BL.AlbumTitle);
+                Boolean existingArtistSong = BL.checkForExistingArtistSongBL(connectionString, ML.TrackTitle, ML.AlbumTitle);
                 if (existingArtistSong == false)
                 {
-                    artistSongRowsInserted = BL.insertArtistSongBL(connectionString, currentKeyFromArtist, BL.TrackTitle, BL.AlbumTitle, BL.Genre, BL.Year, BL.TrackNumber, BL.Duration);
+                    artistSongRowsInserted = BL.insertArtistSongBL(connectionString, artistKey, artistItemKey, ML.TrackTitle, ML.AlbumTitle, ML.Genre, ML.Year, ML.TrackNumber, ML.Duration);
                 }
 
                 //Console.WriteLine("Path.....: " + BL.FilePath);

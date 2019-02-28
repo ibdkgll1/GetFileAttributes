@@ -11,42 +11,6 @@ namespace GetFileAttributes.Business_Logic
     {
         DataAccess DA = new DataAccess();
 
-        public string AlbumArtist { get; set; }
-        public string Genre { get; set; }
-        public string AlbumTitle { get; set; }
-        public int Year { get; set; }
-        public string Type { get; set; }
-        public int TrackNumber { get; set; }
-        public string TrackTitle { get; set; }
-        public TimeSpan Duration { get; set; }
-        public decimal FileSize { get; set; }
-        public int Bitrate { get; set; }
-        public string FilePath { get; set; }
-        public DateTime FileCreated { get; set; }
-        public DateTime FileModified { get; set; }
-
-        public BusinessLogic(string albumArtist, string genre, string albumTitle, int year, string type, int trackNumber, string trackTitle, TimeSpan duration, decimal fileSize, int bitrate, string filePath, DateTime fileCreated, DateTime fileModified)
-        {
-            AlbumArtist = albumArtist;
-            Genre = genre;
-            AlbumTitle = albumTitle;
-            Year = year;
-            Type = type;
-            TrackNumber = trackNumber;
-            TrackTitle = trackTitle;
-            Duration = duration;
-            FileSize = fileSize;
-            Bitrate = bitrate;
-            FilePath = filePath;
-            FileCreated = fileCreated;
-            FileModified = fileModified;
-        }
-
-        public BusinessLogic()
-        {
-
-        }
-
         public Boolean checkForExistingArtistBL(string connection, string artistName)
         {
             try
@@ -60,11 +24,11 @@ namespace GetFileAttributes.Business_Logic
             }
         }
 
-        public int getCurrentKeyFromArtistBL(string connection)
+        public string getCurrentKeyFromArtistBL(string connection, string artistName)
         {
             try
             {
-                int currentKeyFromArtist = DA.getCurrentKeyFromArtistDA(connection);
+                string currentKeyFromArtist = DA.getCurrentKeyFromArtistDA(connection, artistName);
                 return currentKeyFromArtist;
             }
             catch (Exception ex)
@@ -73,11 +37,11 @@ namespace GetFileAttributes.Business_Logic
             }
         }
 
-        public int insertArtistBL(string connection, int artistId, string artistName)
+        public int insertArtistBL(string connection, string artistKey, string artistName)
         {
             try
             {
-                int recordsInserted = DA.insertArtistDA(connection, artistId, artistName);
+                int recordsInserted = DA.insertArtistDA(connection, artistKey, artistName);
                 return recordsInserted;
             }
             catch (Exception ex)
@@ -99,11 +63,11 @@ namespace GetFileAttributes.Business_Logic
             }
         }
 
-        public int insertArtistFileBL(string connection, int artistId, string artistPath, string artistFile, DateTime artistFileCreated, DateTime artistFileModified, decimal artistFileSize, string artistFileType, int artistFileBitRate)
+        public int insertArtistFileBL(string connection, string artistKey, string artistItemKey, string artistPath, string artistFile, DateTime artistFileCreated, DateTime artistFileModified, decimal artistFileSize, string artistFileType, int artistFileBitRate)
         {
             try
             {
-                int recordsInserted = DA.insertArtistFileDA(connection, artistId, artistPath, artistFile, artistFileCreated, artistFileModified, artistFileSize, artistFileType, artistFileBitRate);
+                int recordsInserted = DA.insertArtistFileDA(connection, artistKey, artistItemKey, artistPath, artistFile, artistFileCreated, artistFileModified, artistFileSize, artistFileType, artistFileBitRate);
                 return recordsInserted;
             }
             catch (Exception ex)
@@ -125,11 +89,11 @@ namespace GetFileAttributes.Business_Logic
             }
         }
 
-        public int insertArtistSongBL(string connection, int artistId, string artistTitle, string artistAlbum, string artistGenre, int artistYear, int artistTrackNumber, TimeSpan artistDuration)
+        public int insertArtistSongBL(string connection, string artistKey, string artistItemKey, string artistTitle, string artistAlbum, string artistGenre, int artistYear, int artistTrackNumber, TimeSpan artistDuration)
         {
             try
             {
-                int recordsInserted = DA.insertArtistSongDA(connection, artistId, artistTitle, artistAlbum, artistGenre, artistYear, artistTrackNumber, artistDuration);
+                int recordsInserted = DA.insertArtistSongDA(connection, artistKey, artistItemKey, artistTitle, artistAlbum, artistGenre, artistYear, artistTrackNumber, artistDuration);
                 return recordsInserted;
             }
             catch (Exception ex)

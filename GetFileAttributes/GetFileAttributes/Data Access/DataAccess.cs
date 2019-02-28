@@ -46,26 +46,28 @@ namespace GetFileAttributes.Data_Access
             }
         }
 
-        public int getCurrentKeyFromArtistDA(string connection)
+        public string getCurrentKeyFromArtistDA(string connection, string artistName)
         {
             try
             {
-                int nextCurrentFromArtist = 0;
+                string artistKey = string.Empty;
 
                 SqlConnection myConnection = new SqlConnection(connection);
                 myConnection.Open();
 
-                string query = "SELECT TOP 1 ArtistId FROM Artist ORDER BY ArtistId DESC";
+                string query = "SELECT TOP 1 ArtistKey FROM Artist WHERE ArtistName = @ArtistName";
                 SqlCommand myCommand = new SqlCommand(query, myConnection);
+
+                myCommand.Parameters.AddWithValue("@ArtistName", artistName);
 
                 SqlDataReader dr = myCommand.ExecuteReader();
                 while (dr.Read())
                 {
-                    nextCurrentFromArtist = Convert.ToInt32(dr["ArtistId"]);
+                    artistKey = dr["ArtistKey"].ToString();
                 }
 
                 myConnection.Close();
-                return nextCurrentFromArtist;
+                return artistKey;
             }
             catch (Exception ex)
             {
@@ -73,19 +75,19 @@ namespace GetFileAttributes.Data_Access
             }
         }
 
-        public int insertArtistDA(string connection, int artistId, string artistName)
+        public int insertArtistDA(string connection, string artistKey, string artistName)
         {
             try
             {
                 SqlConnection myConnection = new SqlConnection(connection);
                 myConnection.Open();
 
-                string query = "INSERT INTO Artist (ArtistId, ArtistName)";
-                query += " VALUES (@ArtistId, @ArtistName)";
+                string query = "INSERT INTO Artist (ArtistKey, ArtistName, ArtistInsertDateTime, ArtistUpdateDateTime)";
+                query += " VALUES (@ArtistKey, @ArtistName, GETDATE(), GETDATE())";
 
                 SqlCommand myCommand = new SqlCommand(query, myConnection);
 
-                myCommand.Parameters.AddWithValue("@ArtistId", artistId);
+                myCommand.Parameters.AddWithValue("@ArtistKey", artistKey);
                 myCommand.Parameters.AddWithValue("@ArtistName", artistName);
 
                 int recordInserted = myCommand.ExecuteNonQuery();
@@ -135,19 +137,20 @@ namespace GetFileAttributes.Data_Access
             }
         }
 
-        public int insertArtistFileDA(string connection, int artistId, string artistPath, string artistFile, DateTime artistFileCreated, DateTime artistFileModified, decimal artistFileSize, string artistFileType, int artistFileBitRate)
+        public int insertArtistFileDA(string connection, string artistKey, string artistItemKey, string artistPath, string artistFile, DateTime artistFileCreated, DateTime artistFileModified, decimal artistFileSize, string artistFileType, int artistFileBitRate)
         {
             try
             {
-                string query = "INSERT INTO ArtistFile (ArtistId, ArtistPath, ArtistFile, ArtistFileCreated, ArtistFileModified, ArtistFileSize, ArtistFileType, ArtistFileBitRate)";
-                query += " VALUES (@ArtistId, @ArtistPath, @ArtistFile, @ArtistFileCreated, @ArtistFileModified, @ArtistFileSize, @ArtistFileType, @ArtistFileBitRate)";
+                string query = "INSERT INTO ArtistFile (ArtistKey, ArtistItemKey, ArtistPath, ArtistFile, ArtistFileCreated, ArtistFileModified, ArtistFileSize, ArtistFileType, ArtistFileBitRate)";
+                query += " VALUES (@ArtistKey, @ArtistItemKey, @ArtistPath, @ArtistFile, @ArtistFileCreated, @ArtistFileModified, @ArtistFileSize, @ArtistFileType, @ArtistFileBitRate)";
 
                 SqlConnection myConnection = new SqlConnection(connection);
                 myConnection.Open();
 
                 SqlCommand myCommand = new SqlCommand(query, myConnection);
 
-                myCommand.Parameters.AddWithValue("@ArtistId", artistId);
+                myCommand.Parameters.AddWithValue("@ArtistKey", artistKey);
+                myCommand.Parameters.AddWithValue("@ArtistItemKey", artistItemKey);
                 myCommand.Parameters.AddWithValue("@ArtistPath", artistPath);
                 myCommand.Parameters.AddWithValue("@ArtistFile", artistFile);
                 myCommand.Parameters.AddWithValue("@ArtistFileCreated", artistFileCreated);
@@ -204,19 +207,20 @@ namespace GetFileAttributes.Data_Access
             }
         }
 
-        public int insertArtistSongDA(string connection, int artistId, string artistTitle, string artistAlbum, string artistGenre, int artistYear, int artistTrackNumber, TimeSpan artistDuration)
+        public int insertArtistSongDA(string connection, string artistKey, string artistItemKey, string artistTitle, string artistAlbum, string artistGenre, int artistYear, int artistTrackNumber, TimeSpan artistDuration)
         {
             try
             {
-                string query = "INSERT INTO ArtistSong (ArtistId, ArtistTitle, ArtistAlbum, ArtistGenre, ArtistYear, ArtistTrackNumber, ArtistDuration)";
-                query += " VALUES (@ArtistId, @ArtistTitle, @ArtistAlbum, @ArtistGenre, @ArtistYear, @ArtistTrackNumber, @ArtistDuration)";
+                string query = "INSERT INTO ArtistSong (ArtistKey, ArtistItemKey, ArtistTitle, ArtistAlbum, ArtistGenre, ArtistYear, ArtistTrackNumber, ArtistDuration, ArtistCreated, ArtistUpdated)";
+                query += " VALUES (@ArtistKey, @ArtistItemKey, @ArtistTitle, @ArtistAlbum, @ArtistGenre, @ArtistYear, @ArtistTrackNumber, @ArtistDuration, GETDATE(), GETDATE())";
 
                 SqlConnection myConnection = new SqlConnection(connection);
                 myConnection.Open();
 
                 SqlCommand myCommand = new SqlCommand(query, myConnection);
 
-                myCommand.Parameters.AddWithValue("@ArtistId", artistId);
+                myCommand.Parameters.AddWithValue("@ArtistKey", artistKey);
+                myCommand.Parameters.AddWithValue("@ArtistItemKey", artistItemKey);
                 myCommand.Parameters.AddWithValue("@ArtistTitle", artistTitle);
                 myCommand.Parameters.AddWithValue("@ArtistAlbum", artistAlbum);
                 myCommand.Parameters.AddWithValue("@ArtistGenre", artistGenre);
