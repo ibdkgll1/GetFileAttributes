@@ -171,7 +171,7 @@ namespace GetFileAttributes.Data_Access
             }
         }
 
-        public Boolean checkForExistingArtistSongDA(string connection, string artistTitle, string artistAlbum)
+        public Boolean checkForExistingArtistSongDA(string connection, string artistItemKey)
         {
             try
             {
@@ -180,11 +180,10 @@ namespace GetFileAttributes.Data_Access
                 SqlConnection myConnection = new SqlConnection(connection);
                 myConnection.Open();
 
-                string query = "SELECT TOP 1 ArtistTitle FROM ArtistSong WHERE ArtistTitle = @ArtistTitle AND ArtistAlbum = @ArtistAlbum";
+                string query = "SELECT TOP 1 ArtistTitle FROM ArtistSong WHERE ArtistItemKey = @ArtistItemKey";
                 SqlCommand myCommand = new SqlCommand(query, myConnection);
 
-                myCommand.Parameters.AddWithValue("@ArtistTitle", artistTitle);
-                myCommand.Parameters.AddWithValue("@ArtistAlbum", artistAlbum);
+                myCommand.Parameters.AddWithValue("@ArtistItemKey", artistItemKey);
 
                 SqlDataReader dr = myCommand.ExecuteReader();
                 while (dr.Read())

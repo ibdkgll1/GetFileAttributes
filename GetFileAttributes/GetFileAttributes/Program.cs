@@ -79,7 +79,7 @@ namespace GetFileAttributes
                         totalArtistCount = totalArtistCount + 1;
                     }
 
-                    if (totalArtistCount < 10)
+                    if (totalArtistCount < 100)
                     {
                         //Debug.WriteLine("Path: " + path + ", File: " + file + ", Artist: " + artistName + ", Album: " + artistAlbumName);
                         processSong(path, file, artistName, artistAlbumName);
@@ -170,20 +170,24 @@ namespace GetFileAttributes
                 }
 
                 int artistFileRowsInserted = 0;
+                int artistSongRowsInserted = 0;
                 Boolean existingArtistFile = BL.checkForExistingArtistFileBL(connectionString, source, file);
                 if (existingArtistFile == false)
                 {
                     artistFileRowsInserted = BL.insertArtistFileBL(connectionString, artistKey, artistItemKey, ML.FilePath, file, ML.FileCreated, ML.FileModified, ML.FileSize, ML.Type, ML.Bitrate);
                     totalArtistFileRowsInserted = totalArtistFileRowsInserted + artistFileRowsInserted;
-                }
 
-                int artistSongRowsInserted = 0;
-                Boolean existingArtistSong = BL.checkForExistingArtistSongBL(connectionString, ML.TrackTitle, artistAlbumName);
-                if (existingArtistSong == false)
-                {
                     artistSongRowsInserted = BL.insertArtistSongBL(connectionString, artistKey, artistItemKey, ML.TrackTitle, artistAlbumName, ML.Genre, ML.Year, ML.TrackNumber, ML.Duration);
                     totalArtistSongRowsInserted = totalArtistSongRowsInserted + artistSongRowsInserted;
                 }
+
+                //int artistSongRowsInserted = 0;
+                //Boolean existingArtistSong = BL.checkForExistingArtistSongBL(connectionString, artistItemKey);
+                //if (existingArtistSong == false)
+                //{
+                //    artistSongRowsInserted = BL.insertArtistSongBL(connectionString, artistKey, artistItemKey, ML.TrackTitle, artistAlbumName, ML.Genre, ML.Year, ML.TrackNumber, ML.Duration);
+                //    totalArtistSongRowsInserted = totalArtistSongRowsInserted + artistSongRowsInserted;
+                //}
 
                 //Console.WriteLine("Path.....: " + BL.FilePath);
                 //Console.WriteLine("File.....: " + file);

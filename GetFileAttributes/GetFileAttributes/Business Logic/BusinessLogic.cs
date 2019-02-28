@@ -76,11 +76,11 @@ namespace GetFileAttributes.Business_Logic
             }
         }
 
-        public Boolean checkForExistingArtistSongBL(string connection, string artistTitle, string albumTitle)
+        public Boolean checkForExistingArtistSongBL(string connection, string artistItemKey)
         {
             try
             {
-                Boolean existingArtistSong = DA.checkForExistingArtistSongDA(connection, artistTitle, albumTitle);
+                Boolean existingArtistSong = DA.checkForExistingArtistSongDA(connection, artistItemKey);
                 return existingArtistSong;
             }
             catch (Exception ex)
